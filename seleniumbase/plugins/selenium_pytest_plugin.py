@@ -139,31 +139,3 @@ def log_folder_setup(config):
             if not settings.ARCHIVE_EXISTING_LOGS:
                 shutil.rmtree(archived_logs)
 
-
-# def pytest_unconfigure():
-#     """ This runs after all tests have completed with pytest """
-#     print "Unconfigure"
-
-
-# def pytest_runtest_setup(item):
-#     """ This runs before every test with pytest """
-
-#     print "runing ", type(item)
-
-  
-#     #return self.driver
-   
-
-# def pytest_runtest_call(item):
-#     # print "run test call", type(item.parent)
-#     # print "run test call" 
-#     # item._obj.im_self.driver = "vivek"
-#     pass
-#     # for x in dir(item._obj.im_self):
-#     #     print x
-    
-
-# def pytest_runtest_teardown(item, nextitem):
-#     """ This runs after every test with pytest """
-#     print "runtest tear down"
-#     item.driver = webdriver.Chrome()

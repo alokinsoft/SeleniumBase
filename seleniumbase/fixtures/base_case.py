@@ -30,8 +30,8 @@ from seleniumbase.fixtures import page_utils
 from seleniumbase.fixtures import xpath_to_css
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.by import By
-
-
+from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 class BaseCase(unittest.TestCase):
     '''
     A base test case that wraps methods for enhanced usage.
@@ -832,6 +832,9 @@ class BaseCase(unittest.TestCase):
                                     self.__class__.__name__,
                                     self._testMethodName)
             self.with_selenium = pytest.config.option.with_selenium
+            self.selenium_server = pytest.config.option.selenium_server
+            self.selenium_port = pytest.config.option.selenium_port
+            self.platform = pytest.config.option.platform
             self.headless = pytest.config.option.headless
             self.headless_active = False
             self.with_testing_base = pytest.config.option.with_testing_base
@@ -848,7 +851,7 @@ class BaseCase(unittest.TestCase):
             self.demo_mode = pytest.config.option.demo_mode
             self.demo_sleep = pytest.config.option.demo_sleep
             self.highlights = pytest.config.option.highlights
-            self.verify_delay = pytest.config.option.verify_delay
+            self.verify_delay = pytest.config.option.masterqa_verify_delay
             if self.with_db_reporting:
                 self.execution_guid = str(uuid.uuid4())
                 self.testcase_guid = None
@@ -886,8 +889,19 @@ class BaseCase(unittest.TestCase):
                 self.display = Display(visible=0, size=(1200, 800))
                 self.display.start()
                 self.headless_active = True
-            if self.with_selenium:
+            
+            if self.selenium_server and self.with_selenium:
+
+
+                url = "http://%s:%s/wd/hub" % (self.selenium_server, self.selenium_port)
+                capabilities = dict()
+                capabilities['browserName'] = self.browser
+                capabilities['platform'] = self.platform
+                self.driver = webdriver.Remote(url, desired_capabilities=capabilities)
+
+            elif self.with_selenium:
                 self.driver = browser_launcher.get_driver(self.browser)
+
 
     def __insert_test_result(self, state, err):
         data_payload = TestcaseDataPayload()
