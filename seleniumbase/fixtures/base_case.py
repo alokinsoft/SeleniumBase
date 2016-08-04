@@ -851,7 +851,10 @@ class BaseCase(unittest.TestCase):
             self.demo_mode = pytest.config.option.demo_mode
             self.demo_sleep = pytest.config.option.demo_sleep
             self.highlights = pytest.config.option.highlights
-            self.verify_delay = pytest.config.option.masterqa_verify_delay
+            self.verify_delay = pytest.config.option.verify_delay
+            self.browser_version = pytest.config.option.browser_version
+            self.bot_url = pytest.config.option.bot_url
+
             if self.with_db_reporting:
                 self.execution_guid = str(uuid.uuid4())
                 self.testcase_guid = None
@@ -898,6 +901,19 @@ class BaseCase(unittest.TestCase):
                 capabilities['browserName'] = self.browser
                 capabilities['platform'] = self.platform
                 self.driver = webdriver.Remote(url, desired_capabilities=capabilities)
+
+            elif self.bot_url and self.with_selenium:
+
+                capabilities = dict()
+                capabilities['browserName'] = self.browser
+                capabilities['platform'] = self.platform
+
+                if self.browser_version:
+                    capabilities['version'] = self.browser_version
+
+                self.driver = webdriver.Remote(
+                command_executor=self.bot_url, desired_capabilities=capabilities)
+
 
             elif self.with_selenium:
                 self.driver = browser_launcher.get_driver(self.browser)

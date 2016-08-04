@@ -32,14 +32,21 @@ def pytest_addoption(parser):
                           default='4444',
                           help="""Designates the port used by the test.
                                Default: 4444.""")
+    
+    parser.addoption('--bot', action='store', dest='bot_url',
+                          default=False,
+                          help="""bot url input""")
 
 
 
-    parser.addoption('--masterqa_verify_delay', action='store', dest='masterqa_verify_delay',
-                     default=None,
-                     help="""Setting this overrides the default wait time
-                          before each MasterQA verification pop-up.""")
 
+    parser.addoption('--browser-version', action='store', dest='browser_version',
+                          default=False,
+                          help="""browser version for the test""")
+
+
+
+    
     parser.addoption('--is_pytest', action="store_true",
                      dest='is_pytest',
                      default=True,
